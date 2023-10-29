@@ -77,7 +77,7 @@ class DBStorage:
 
     def get(self, cls, id):
         """Retrieve one object
-        
+
         Returns the object based on the class and its ID,
         or None if not found
         """
@@ -94,7 +94,7 @@ class DBStorage:
         Returns the number of objects in storage matching the given
         class. If no class is passed, returns the count of
         all objects in storage.
-        
+
         """
         if cls is None:
             counter = 0
