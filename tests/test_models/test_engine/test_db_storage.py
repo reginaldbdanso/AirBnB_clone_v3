@@ -19,8 +19,9 @@ import os
 import pycodestyle as pep8
 import unittest
 DBStorage = db_storage.DBStorage
-classes = {"Amenity": Amenity, "City": City, "Place": Place,
-           "Review": Review, "State": State, "User": User}
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
+           "Place": Place, "Review": Review, "State": State, "User": User}
+models.storage_t = 'db'
 
 
 class TestDBStorageDocs(unittest.TestCase):
@@ -68,8 +69,8 @@ test_db_storage.py'])
                             "{:s} method needs a docstring".format(func[0]))
 
 
-class TestFileStorage(unittest.TestCase):
-    """Test the FileStorage class"""
+class TestDBStorage(unittest.TestCase):
+    """Test the DBStorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
@@ -78,11 +79,49 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
+        # Create some test data
+        obj1 = BaseModel()
+        obj2 = BaseModel()
+        obj3 = BaseModel()
+
+        # Save the test data to the database
+        storage = DBStorage()
+        storage.new(obj1)
+        storage.new(obj2)
+        storage.new(obj3)
+        storage.save()
+
+        # Call the all method with no class argument
+        results = storage.all()
+
+        # Check that the results contain all the test data
+        self.assertIn(obj1, results.values())
+        self.assertIn(obj2, results.values())
+        self.assertIn(obj3, results.values())
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
+        new_state = State(name="California")
+        new_state.save()
+        self.assertIn(new_state, models.storage.all().values())
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
-        """Test that save properly saves objects to file.json"""
+        """Test that save properly saves objects to the database"""
+        # Create some test data
+        obj1 = BaseModel()
+        obj2 = BaseModel()
+        obj3 = BaseModel()
+
+        # Save the test data to the database
+        storage = DBStorage()
+        storage.new(obj1)
+        storage.new(obj2)
+        storage.new(obj3)
+        storage.save()
+
+        # Check that the objects were saved to the database
+        self.assertIn(obj1, models.storage.all().values())
+        self.assertIn(obj2, models.storage.all().values())
+        self.assertIn(obj3, models.storage.all().values())
