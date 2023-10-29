@@ -21,7 +21,12 @@ import unittest
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
-models.storage_t = 'db'
+# models.storage_t = "db"
+os.putenv("HBNB_TYPE_STORAGE", "db")
+os.putenv("HBNB_MYSQL_USER", "hbnb_test")
+os.putenv("HBNB_MYSQL_PWD", "hbnb_test_pwd")
+os.putenv("HBNB_MYSQL_HOST", "localhost")
+os.putenv("HBNB_MYSQL_DB", "hbnb_test_db")
 
 
 class TestDBStorageDocs(unittest.TestCase):
@@ -116,6 +121,7 @@ class TestDBStorage(unittest.TestCase):
 
         # Save the test data to the database
         storage = DBStorage()
+        # storage.reload()
         storage.new(obj1)
         storage.new(obj2)
         storage.new(obj3)
