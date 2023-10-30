@@ -113,3 +113,28 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+
+class TestFileStorageMethods(unittest.TestCase):
+    """Test the count method of FileStorage class"""
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_all(self):
+        """Test count method with no class argument"""
+        storage = FileStorage()
+        count_all = storage.count()
+        self.assertEqual(count_all, len(storage.all()))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_class(self):
+        """Test count method with class argument"""
+        storage = FileStorage()
+        count_state = storage.count(State)
+        self.assertEqual(count_state, len(storage.all(State)))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_class_name(self):
+        """Test count method with class name argument"""
+        storage = FileStorage()
+        count_state = storage.count("State")
+        self.assertEqual(count_state, len(storage.all(State)))

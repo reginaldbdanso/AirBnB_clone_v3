@@ -131,3 +131,71 @@ class TestDBStorage(unittest.TestCase):
         self.assertIn(obj1, models.storage.all().values())
         self.assertIn(obj2, models.storage.all().values())
         self.assertIn(obj3, models.storage.all().values())
+
+
+class TestDBStorageMethods(unittest.TestCase):
+    """Test the methods of the DBStorage class"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test the get method"""
+        # Create some test data
+        obj1 = State(name="California")
+        obj1.save()
+
+        # Get the object using the get method
+        obj2 = models.storage.get(State, obj1.id)
+
+        # Check that the object is the same as the original object
+        self.assertEqual(obj1, obj2)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test the count method"""
+        # Create some test data
+        obj1 = State(name="California")
+        obj2 = State(name="Nevada")
+        obj3 = City(name="San Francisco", state_id=obj1.id)
+        obj4 = City(name="Las Vegas", state_id=obj2.id)
+        obj5 = Review(text="Great place", place_id="1234", user_id="5678")
+        obj6 = Review(text="Terrible place", place_id="4321", user_id="8765")
+        obj1.save()
+        obj2.save()
+        obj3.save()
+        obj4.save()
+        obj5.save()
+        obj6.save()
+
+        # Check that the count method returns the correct number of objects
+        self.assertEqual(models.storage.count(), 6)
+        self.assertEqual(models.storage.count(State), 2)
+        self.assertEqual(models.storage.count(City), 2)
+        self.assertEqual(models.storage.count(Review), 2)
+        self.assertEqual(models.storage.count(User), 0)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_delete(self):
+        """Test the delete method"""
+        # Create some test data
+        obj1 = State(name="California")
+        obj1.save()
+
+        # Delete the object using the delete method
+        models.storage.delete(obj1)
+        models.storage.save()
+
+        # Check that the object was deleted from the database
+        self.assertNotIn(obj1, models.storage.all().values())
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_reload(self):
+        """Test the reload method"""
+        # Create some test data
+        obj1 = State(name="California")
+        obj1.save()
+
+        # Reload the database
+        models.storage.reload()
+
+        # Check that the object is no longer in the database
+        self.assertNotIn(obj1, models.storage.all().values())
