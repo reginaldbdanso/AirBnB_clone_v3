@@ -1,6 +1,14 @@
 #!/usr/bin/python3
-""" City objects that handles all default 
-RestFul API actions 
+"""
+This module contains the endpoints for City objects that handle all default
+RESTful API actions.
+
+It defines the following endpoints:
+    * GET /states/<state_id>/cities: Retrieves the list of all City objects of a State
+    * GET /cities/<city_id>: Retrieves a City object
+    * DELETE /cities/<city_id>: Deletes a City object
+    * POST /states/<state_id>/cities: Creates a City object
+    * PUT /cities/<city_id>: Updates a City object
 """
 from flask import abort, jsonify, request
 from models import storage
