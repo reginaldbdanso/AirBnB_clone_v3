@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" City objects that handles all default RestFul API actions """
+""" City objects that handles all default 
+RestFul API actions 
+"""
 from flask import abort, jsonify, request
 from models import storage
 from models.city import City
