@@ -1,10 +1,5 @@
 #!/usr/bin/python3
-
-"""
-Cities objects that handles all default 
-RestFul API actions 
-"""
-
+""" Cities module"""
 from flask import abort, jsonify, request
 from models import storage
 from models.city import City
