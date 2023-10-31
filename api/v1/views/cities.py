@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Cities module"""
+"""Cities module"""
 from flask import abort, jsonify, request
 from models import storage
 from models.city import City
